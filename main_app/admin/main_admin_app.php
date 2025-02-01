@@ -38,11 +38,11 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="main_admin_app.php?unit=beranda" class="nav-link">Home</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
+     <!-- <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
-      </li>
+      </li>-->
     </ul>
 
     <!-- Right navbar links -->
@@ -133,21 +133,27 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Charts
+                Charts Kunjungan 
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
+                <a href="main_admin_app.php?unit=grafikpoli_lansia&action=datagrid" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Kunjungan Pasien</p>
+                  <p>Lansia</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
+                <a href="main_admin_app.php?unit=grafikpoli_dewasa&action=datagrid" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Flot</p>
+                  <p>Dewasa</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="main_admin_app.php?unit=grafikpoli_anak&action=datagrid" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Anak</p>
                 </a>
               </li>
             </ul>
