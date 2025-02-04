@@ -2,7 +2,7 @@
 // Query untuk mengambil data pendaftaran pasien
 $tahun = date('Y');
 $tanggal_awal = "$tahun-01-01"; // Awal tahun
-$tanggal_sekarang = date('Y-m-d'); // Tanggal hari ini
+$tanggal_sekarang = date('Y-m-d'); // Tanggal hari inii
 $sql = "SELECT DATE_FORMAT(insert_at, '%Y-%m-%d') AS bulan, COUNT(*) AS jumlah 
         FROM daftar_pasien 
         WHERE insert_at >= '$tanggal_awal' 
