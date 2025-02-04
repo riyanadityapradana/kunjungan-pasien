@@ -1,9 +1,14 @@
 <?php
 	session_start();
 	if (!isset($_SESSION['username'])) header("location:../../main_login/form_login.php");
-    if (isset($_GET['unit'])){ $unit = $_GET['unit']; } 
+     if (isset($_GET['unit'])){ $unit = $_GET['unit']; } 
 	require_once("../../configuration/koneksi.php");
 	ob_start();
+
+     $id = $_SESSION['kd_poli'];
+     $query = "SELECT * FROM poliklinik WHERE kd_poli = '$id'";
+     $admin = mysqli_fetch_array(mysqli_query($mysqli,$query));
+     $nama = $admin['nm_poli'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,17 +24,16 @@
   <link rel="stylesheet" href="../../assets/plugins/fontawesome-free/css/all.min.css">
   <!-- fullCalendar -->
   <link rel="stylesheet" href="../../assets/plugins/fullcalendar/main.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../../assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- DataTables -->
   <link rel="stylesheet" href="../../assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../../assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../../assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="../../assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../assets/dist/css/adminlte.min.css">
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-  ff
+<body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -45,7 +49,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="main_admin_app.php?unit=beranda" class="nav-link">Home</a>
+        <a href="main_poli_app.php?unit=beranda" class="nav-link">Home</a>
       </li>
      <!-- <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -84,7 +88,7 @@
           <div class="dropdown-divider"></div>
           <div class="dropdown-divider"></div>
           <a href="" class="dropdown-item" data-toggle="modal" data-target="#modallogout">
-            <i class="fas fa-in mr-2"></i> Logout
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
           </a>
       </li>
     </ul>
@@ -94,7 +98,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="main_poli_app.php?unit=beranda" class="brand-link">
       <img src="../../assets/img/logo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">RSPI-LTE</span>
     </a>
@@ -104,10 +108,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="../../assets/img/poli.jpeg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Admin IT</a>
+          <a href="main_poli_app.php?unit=beranda" class="d-block"> <?php echo $nama ?></a>
         </div>
       </div>
 
@@ -129,7 +133,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="main_poli_app.php?unit=beranda" class="nav-link">
             <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
               Dashboard
@@ -137,68 +141,48 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-ambulance"></i>
+            <a href="main_poli_app.php?unit=grafik_poli" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
               <p>
-                Kunjungan Pasien
-                <i class="right fas fa-angle-left"></i>
+               Charts Kunjungan
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=grafikpoli_lansia&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-chart-pie"></i>
-                  <p>Chart</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=lansia&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Lansia</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=dewasa&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Dewasa</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=remaja&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Remaja</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=anak&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Anak</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-envelope"></i>
+              <i class="nav-icon fas fa-table"></i>
               <p>
-                Pi-Care
+                Kunjungan Pasien
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                  <a href="main_admin_app.php?unit=daftar&action=datagrid" class="nav-link">
-                    <i class="nav-icon fas fa-envelope-open"></i>
-                    <p>PENDAFTARAN</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="main_admin_app.php?unit=batal&action=datagrid" class="nav-link">
-                    <i class="nav-icon fas fa-envelope-open"></i>
-                    <p>PEMBATALAN</p>
-                  </a>
-                </li>
+                <a href="main_poli_app.php?unit=lansia&action=datagrid" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Kategori Lansia</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="main_poli_app.php?unit=dewasa&action=datagrid" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Kategori Dewasa</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="main_poli_app.php?unit=remaja&action=datagrid" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Kategori Remaja</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="main_poli_app.php?unit=anak&action=datagrid" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Kategori Anak</p>
+                </a>
+              </li>
             </ul>
+          </li>
           </li>
         </ul>
       </nav>
@@ -244,8 +228,6 @@
 <script src="../../assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script src="../../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="../../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script src="../../assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../../assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -259,8 +241,11 @@
 <script src="../../assets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="../../assets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../../assets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="../../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../assets/dist/js/adminlte.js"></script>
+<script src="../../assets/plugins/moment/moment.min.js"></script>
 <!-- jQuery UI -->
 <script src="../../assets/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script src="../../assets/plugins/fullcalendar/main.js"></script>
@@ -429,75 +414,23 @@
   })
 </script>
 
-<!-- Page specific script -->
-<script type="text/javascript">
-    $(document).ready(function() {
-      $('#example').DataTable({
-        "lengthChange": true,
-        //"pageLength": 5, // Menampilkan 5 data per halaman
-        "paging":true,
-        "pagingType":"numbers",
-        "scrollCollapse": true,
-        "ordering":true,
-        "info":true,
-        "language":{
-          "decimal":       "",
-          "sEmptyTable":   "Tidak ada data yang tersedia pada tabel ini",
-          "sProcessing":   "Sedang memproses...",
-          "sLengthMenu":   "Tampilkan _MENU_ entri",
-          "sZeroRecords":  "Tidak ditemukan data yang sesuai",
-          "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-          "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
-          "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-          "sInfoPostFix":  "",
-          "sSearch":       "",
-          "searchPlaceholder": "Cari Sekolah..",
-          "sUrl":          "",
-          "oPaginate": {
-            "sFirst":    "Pertama",
-            "sPrevious": "Sebelumnya",
-            "sNext":     "Selanjutnya",
-            "sLast":     "Terakhir"
-          }
-        }
-      });
-    });
-  </script>
 
-  <!-- Page specific script -->
-<script type="text/javascript">
-    $(document).ready(function() {
-      $('#example-picare').DataTable({
-        "lengthChange": true,
-        "pageLength": 5, // Menampilkan 5 data per halaman
-        "paging":true,
-        "pagingType":"numbers",
-        "scrollCollapse": true,
-        "ordering":true,
-        "info":true,
-        "language":{
-          "decimal":       "",
-          "sEmptyTable":   "Tidak ada data yang tersedia pada tabel ini",
-          "sProcessing":   "Sedang memproses...",
-          "sLengthMenu":   "Tampilkan _MENU_ entri",
-          "sZeroRecords":  "Tidak ditemukan data yang sesuai",
-          "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-          "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 entri",
-          "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
-          "sInfoPostFix":  "",
-          "sSearch":       "",
-          "searchPlaceholder": "Cari Sekolah..",
-          "sUrl":          "",
-          "oPaginate": {
-            "sFirst":    "Pertama",
-            "sPrevious": "Sebelumnya",
-            "sNext":     "Selanjutnya",
-            "sLast":     "Terakhir"
-          }
-        }
-      });
+<!-- Page specific script -->
+<script>
+  $(document).ready(function () {
+    // Inisialisasi DataTable untuk example2
+    $('#example').DataTable({
+      "paging": true,        
+      "lengthChange": true,  // Memungkinkan perubahan jumlah data per halaman
+      "searching": true,     // Mengaktifkan pencarian
+      "ordering": true,      // Mengaktifkan pengurutan kolom
+      "info": true,          // Menampilkan informasi jumlah data
+      "autoWidth": false,
+      "responsive": true
     });
-  </script>
+  });
+</script>
+
 
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
@@ -506,7 +439,7 @@
 <script src="../../assets/plugins/jquery-mapael/jquery.mapael.min.js"></script>
 <script src="../../assets/plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
-<script src="../../assets/plugins/chart.js/chart2.js"></script>
+<script src="../../assets/plugins/chart.js/Chart.min.js"></script>
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../../assets/dist/js/pages/dashboard2.js"></script>

@@ -29,7 +29,7 @@
      <!-- Info boxes -->
           <div class="row">
                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box">
+                    <div class="info-box" style="background:rgb(162, 162, 163)">
                          <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-child"></i></span>
                          <?php
                               $tampil=mysqli_query($mysqli, "SELECT * FROM reg_periksa WHERE reg_periksa.status_lanjut = 'Ralan' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 60");
@@ -45,7 +45,7 @@
                </div>
                <!-- /.col -->
                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box">
+                    <div class="info-box" style="background:rgb(162, 162, 163)">
                          <span class="info-box-icon bg-info elevation-1"><i class="fas fa-child"></i></span>
                          <?php
                               $tampil=mysqli_query($mysqli, "SELECT * FROM reg_periksa WHERE reg_periksa.status_lanjut = 'Ralan' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 60");
@@ -65,7 +65,7 @@
           <div class="clearfix hidden-md-up"></div>
 
                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
+                    <div class="info-box mb-3" style="background:rgb(162, 162, 163)">
                          <span class="info-box-icon bg-success elevation-1"><i class="fas fa-child"></i></span>
 
                          <div class="info-box-content">
@@ -78,7 +78,7 @@
                </div>
                <!-- /.col -->
                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="info-box mb-3">
+                    <div class="info-box mb-3" style="background:rgb(162, 162, 163)">
                          <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-child"></i></span>
 
                          <div class="info-box-content">
