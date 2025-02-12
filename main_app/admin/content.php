@@ -13,8 +13,8 @@ else if ($_GET['unit'] == "grafikpoli_dewasa"){
 else if ($_GET['unit'] == "grafikpoli_anak"){
   require_once("unit/grafikpoli_anak.php");
 }
-else if ($_GET['unit'] == "lansia"){
-  require_once("unit/poli_lansia.php");
+else if ($_GET['unit'] == "grafik_poli"){
+  require_once("unit/kunjungan_pasien/grafik_poli.php");
 }
 else if ($_GET['unit'] == "dewasa"){
   require_once("unit/poli_dewasa.php");

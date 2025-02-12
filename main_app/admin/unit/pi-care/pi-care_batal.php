@@ -1,28 +1,27 @@
 <?php
 // Query untuk mengambil data pendaftaran pasien
-$sql = "SELECT DATE_FORMAT(insert_at, '%Y-%m-%d') AS tanggal, COUNT(*) AS jumlah 
-        FROM batal_daftar 
-        WHERE insert_at >= '2025-01-01' 
-        AND insert_at < '2025-02-01' 
+$tahun = date('Y');
+$tanggal_awal = "$tahun-01-01"; // Awal tahun
+$tanggal_sekarang = date('Y-m-d'); // Tanggal hari ini
+$sql = "SELECT DATE_FORMAT(insert_at, '%Y-%m') AS bulan, COUNT(*) AS jumlah 
+        FROM batal_daftar
+        WHERE insert_at >= '$tanggal_awal' 
+        AND insert_at < '$tanggal_sekarang' 
         AND is_verified <> '0' 
-        GROUP BY DATE(insert_at) 
-        ORDER BY insert_at ASC";
+        GROUP BY bulan 
+        ORDER BY bulan ASC";
 
 // Eksekusi query
 $result = $mysqli2->query($sql);
-
 if (!$result) {
     die("Query error: " . $mysqli2->error);
 }
 
 // Ambil data dan konversi ke array
-$data = $result->fetch_all(MYSQLI_ASSOC);
-
 $labels = [];
 $jumlahPasien = [];
-
-foreach ($data as $row) {
-    $labels[] = $row['tanggal'];
+while ($row = $result->fetch_assoc()) {
+    $labels[] = $row['bulan'];
     $jumlahPasien[] = (int)$row['jumlah'];
 }
 
@@ -34,10 +33,10 @@ $mysqli2->close();
 <section class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
-      <div class="col-sm-8">
-        <h1>DATA PEMBATALAN PENDAFTARAN PASIEN DI PI-CARE</h1>
+      <div class="col-sm-6">
+        <h1>DATA PEMBATALAN PASIEN DI PI-CARE</h1>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="main_admin_app.php?unit=beranda">Home</a></li>
           <li class="breadcrumb-item active">Pi-Care</li>
@@ -55,7 +54,7 @@ $mysqli2->close();
                     <!-- AREA CHART -->
                     <div class="card card-primary">
                     <div class="card-header">
-                         <h3 class="card-title">Chart Pembatalan</h3>
+                         <h3 class="card-title">Chart Kategori Lansia</h3>
                          <div class="card-tools">
                               <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                    <i class="fas fa-minus"></i>
@@ -96,10 +95,10 @@ $mysqli2->close();
                                    </tr>
                               </thead>
                               <tbody>
-                              <?php foreach ($data as $row) { ?>
+                              <?php for ($i = 0; $i < count($labels); $i++) { ?>
                                    <tr>
-                                   <td align='center'><?php echo $row['tanggal']; ?></td>
-                                   <td align='center'><?php echo $row['jumlah']; ?></td>
+                                   <td align='center'><?php echo $labels[$i]; ?></td>
+                                   <td align='center'><?php echo $jumlahPasien[$i]; ?></td>
                                    </tr>
                               <?php } ?>
                               </tbody>
@@ -120,10 +119,10 @@ $mysqli2->close();
           <div class="modal-dialog">
                <div class="modal-content">
                     <div class="modal-header" align = "center">
-                         <h3> PILIH TANGGAL CETAK </h3>
+                         <h3>PILIH TANGGAL KUNJUNGAN</h3>
                     </div>
                     <div class="modal-body" align = "left">
-                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_barangmasuk.php?action=tanggal" target="blank">
+                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_picarebatal.php?action=tanggal" target="blank">
                               <div class="row">
                                    <div class="form-group col-lg-6">
                                         <input type="date" name="tanggalawal" class="form-control" placeholder="<?=date('Y-m-d');?>">
@@ -134,7 +133,7 @@ $mysqli2->close();
                               </div>
                               <div class="row">
                                    <div class="col-lg-6">
-                                        <button type="submit" class="btn btn-block btn-success">CETAK</button>
+                                        <button type="submit" class="btn btn-block btn-success">PROSES</button>
                                    </div>
                                    <div class="col-lg-6">
                                         <button type="button" class="btn btn-block btn-warning" data-dismiss="modal">TUTUP</button>

@@ -2,30 +2,26 @@
 // Query untuk mengambil data pendaftaran pasien
 $tahun = date('Y');
 $tanggal_awal = "$tahun-01-01"; // Awal tahun
-$tanggal_sekarang = date('Y-m-d'); // Tanggal hari inii
-$sql = "SELECT DATE_FORMAT(insert_at, '%Y-%m-%d') AS bulan, COUNT(*) AS jumlah 
+$tanggal_sekarang = date('Y-m-d'); // Tanggal hari ini
+$sql = "SELECT DATE_FORMAT(insert_at, '%Y-%m') AS bulan, COUNT(*) AS jumlah 
         FROM daftar_pasien 
         WHERE insert_at >= '$tanggal_awal' 
         AND insert_at < '$tanggal_sekarang' 
         AND is_verified <> '1' 
-        GROUP BY DATE(insert_at, '%Y-%m') 
+        GROUP BY bulan 
         ORDER BY bulan ASC";
 
 // Eksekusi query
 $result = $mysqli2->query($sql);
-
 if (!$result) {
     die("Query error: " . $mysqli2->error);
 }
 
 // Ambil data dan konversi ke array
-$data = $result->fetch_all(MYSQLI_ASSOC);
-
 $labels = [];
 $jumlahPasien = [];
-
-foreach ($data as $row) {
-    $labels[] = $row['tanggal'];
+while ($row = $result->fetch_assoc()) {
+    $labels[] = $row['bulan'];
     $jumlahPasien[] = (int)$row['jumlah'];
 }
 
@@ -99,10 +95,10 @@ $mysqli2->close();
                                    </tr>
                               </thead>
                               <tbody>
-                              <?php foreach ($data as $row) { ?>
+                              <?php for ($i = 0; $i < count($labels); $i++) { ?>
                                    <tr>
-                                   <td align='center'><?php echo $row['tanggal']; ?></td>
-                                   <td align='center'><?php echo $row['jumlah']; ?></td>
+                                   <td align='center'><?php echo $labels[$i]; ?></td>
+                                   <td align='center'><?php echo $jumlahPasien[$i]; ?></td>
                                    </tr>
                               <?php } ?>
                               </tbody>
@@ -123,10 +119,10 @@ $mysqli2->close();
           <div class="modal-dialog">
                <div class="modal-content">
                     <div class="modal-header" align = "center">
-                         <h3> PILIH TANGGAL CETAK </h3>
+                         <h3>PILIH TANGGAL KUNJUNGAN</h3>
                     </div>
                     <div class="modal-body" align = "left">
-                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_barangmasuk.php?action=tanggal" target="blank">
+                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_picaredaftar.php?action=tanggal" target="blank">
                               <div class="row">
                                    <div class="form-group col-lg-6">
                                         <input type="date" name="tanggalawal" class="form-control" placeholder="<?=date('Y-m-d');?>">
@@ -137,7 +133,7 @@ $mysqli2->close();
                               </div>
                               <div class="row">
                                    <div class="col-lg-6">
-                                        <button type="submit" class="btn btn-block btn-success">CETAK</button>
+                                        <button type="submit" class="btn btn-block btn-success">PROSES</button>
                                    </div>
                                    <div class="col-lg-6">
                                         <button type="button" class="btn btn-block btn-warning" data-dismiss="modal">TUTUP</button>
