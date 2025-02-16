@@ -7,7 +7,7 @@ session_start();
 date_default_timezone_set('Asia/Makassar');
 
 // 🔹 Pastikan MySQL menggunakan zona waktu WITA
-$mysqli2->query("SET time_zone = 'Asia/Makassar'");
+// $mysqli2->query("SET time_zone = 'Asia/Makassar'");
 
 
 $action = $_GET['action'] ?? ''; // Pastikan action tidak undefined

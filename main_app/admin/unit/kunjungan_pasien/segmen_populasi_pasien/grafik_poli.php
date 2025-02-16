@@ -1,3 +1,93 @@
+<?php
+    // Ambil data dari database
+    //$kdpoli = $_SESSION['kd_poli']; // SESSION berdasarkan login
+    //$tahun = date('Y');  //Otomatis tahun sekarang
+    $tahun = 2024;
+    $sql = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
+                   MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
+                   COUNT(no_reg) AS jumlah 
+            FROM reg_periksa 
+            WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun' 
+                  AND reg_periksa.status_lanjut = 'Ralan' 
+                  AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 60
+            GROUP BY bulan 
+            ORDER BY bulan";
+
+     $sql2 = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
+                    MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
+                    COUNT(no_reg) AS jumlah 
+               FROM reg_periksa 
+               WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun'
+                    AND reg_periksa.status_lanjut = 'Ralan' 
+                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 20 
+                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 59
+               GROUP BY bulan 
+               ORDER BY bulan";
+
+     $sql3 = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
+                    MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
+                    COUNT(no_reg) AS jumlah 
+               FROM reg_periksa 
+               WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun'
+                    AND reg_periksa.status_lanjut = 'Ralan' 
+                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 12 
+                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 19
+               GROUP BY bulan 
+               ORDER BY bulan";
+
+     $sql4 = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
+                    MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
+                    COUNT(no_reg) AS jumlah 
+               FROM reg_periksa 
+               WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun'
+                    AND reg_periksa.status_lanjut = 'Ralan' 
+                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 
+                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12
+               GROUP BY bulan 
+               ORDER BY bulan";
+
+    $result = $mysqli->query($sql);
+
+    $labels = [];
+    $data = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $labels[] = $row['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
+        $data[] = (int)$row['jumlah']; // Pastikan nilai dikonversi ke integer
+    }
+
+    $result = $mysqli->query($sql2);
+
+    $labels2 = [];
+    $data2 = [];
+
+    while ($row2 = $result->fetch_assoc()) {
+     $labels2[] = $row2['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
+     $data2[] = (int)$row2['jumlah']; // Pastikan nilai dikonversi ke integer
+     }
+
+     $result = $mysqli->query($sql3);
+
+    $labels3 = [];
+    $data3 = [];
+
+    while ($row3 = $result->fetch_assoc()) {
+     $labels3[] = $row3['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
+     $data3[] = (int)$row3['jumlah']; // Pastikan nilai dikonversi ke integer
+     }
+
+     $result = $mysqli->query($sql4);
+
+    $labels4 = [];
+    $data4 = [];
+
+    while ($row4 = $result->fetch_assoc()) {
+     $labels4[] = $row4['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
+     $data4[] = (int)$row4['jumlah']; // Pastikan nilai dikonversi ke integer
+     }
+
+    $mysqli->close();
+?>
 <section class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
@@ -130,6 +220,8 @@
         <!-- /.row -->
       </div><!-- /.container-fluid -->
 </section>
+
+
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
 <!-- Control sidebar content goes here -->
@@ -137,7 +229,7 @@
 <!-- /.control-sidebar -->
 
   <!-- Bagian modal -->
-<div class="container">
+  <div class="container">
      <div class="modal" id="proses" role="dialog">
           <div class="modal-dialog">
                <div class="modal-content">
@@ -145,7 +237,7 @@
                          <h3>PILIH TANGGAL KUNJUNGAN</h3>
                     </div>
                     <div class="modal-body" align = "left">
-                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_picaredaftar.php?action=tanggal" target="blank">
+                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_grafik_lansia.php?action=tanggal" target="blank">
                               <div class="row">
                                    <div class="form-group col-lg-6">
                                         <input type="date" name="tanggalawal" class="form-control" placeholder="<?=date('Y-m-d');?>">
@@ -272,110 +364,11 @@
 </div>
 <!-- Bagian modal -->
 
-<!-- jQuery -->
-<script src="../../assets/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->
 <script src="../../assets/plugins/chart.js/Chart.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../../assets/dist/js/adminlte.min.js"></script>
 <script src="../../assets/dist/css/chart4.js"></script>
 <link rel="stylesheet" href="../../assets/dist/css/bootstrap.min.css">
-    
-
-<?php
-    // Ambil data dari database
-    //$kdpoli = $_SESSION['kd_poli']; // SESSION berdasarkan login
-    //$tahun = date('Y');  //Otomatis tahun sekarang
-    $tahun = 2024;
-    $sql = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
-                   MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
-                   COUNT(no_reg) AS jumlah 
-            FROM reg_periksa 
-            WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun' 
-                  AND reg_periksa.status_lanjut = 'Ralan' 
-                  AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 60
-            GROUP BY bulan 
-            ORDER BY bulan";
-
-     $sql2 = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
-                    MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
-                    COUNT(no_reg) AS jumlah 
-               FROM reg_periksa 
-               WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun'
-                    AND reg_periksa.status_lanjut = 'Ralan' 
-                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 20 
-                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 59
-               GROUP BY bulan 
-               ORDER BY bulan";
-
-     $sql3 = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
-                    MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
-                    COUNT(no_reg) AS jumlah 
-               FROM reg_periksa 
-               WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun'
-                    AND reg_periksa.status_lanjut = 'Ralan' 
-                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 12 
-                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 19
-               GROUP BY bulan 
-               ORDER BY bulan";
-
-     $sql4 = "SELECT MONTH(reg_periksa.tgl_registrasi) AS bulan,  
-                    MONTHNAME(reg_periksa.tgl_registrasi) AS namabulan, 
-                    COUNT(no_reg) AS jumlah 
-               FROM reg_periksa 
-               WHERE YEAR(reg_periksa.tgl_registrasi) = '$tahun'
-                    AND reg_periksa.status_lanjut = 'Ralan' 
-                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 
-                    AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12
-               GROUP BY bulan 
-               ORDER BY bulan";
-
-    $result = $mysqli->query($sql);
-
-    $labels = [];
-    $data = [];
-
-    while ($row = $result->fetch_assoc()) {
-        $labels[] = $row['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
-        $data[] = (int)$row['jumlah']; // Pastikan nilai dikonversi ke integer
-    }
-
-    $result = $mysqli->query($sql2);
-
-    $labels2 = [];
-    $data2 = [];
-
-    while ($row2 = $result->fetch_assoc()) {
-     $labels2[] = $row2['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
-     $data2[] = (int)$row2['jumlah']; // Pastikan nilai dikonversi ke integer
-     }
-
-     $result = $mysqli->query($sql3);
-
-    $labels3 = [];
-    $data3 = [];
-
-    while ($row3 = $result->fetch_assoc()) {
-     $labels3[] = $row3['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
-     $data3[] = (int)$row3['jumlah']; // Pastikan nilai dikonversi ke integer
-     }
-
-     $result = $mysqli->query($sql4);
-
-    $labels4 = [];
-    $data4 = [];
-
-    while ($row4 = $result->fetch_assoc()) {
-     $labels4[] = $row4['namabulan']; // Gunakan nama bulan untuk tampilan lebih baik
-     $data4[] = (int)$row4['jumlah']; // Pastikan nilai dikonversi ke integer
-     }
-
-    $mysqli->close();
-?>
-
-     <script>
+<script>
         // Ambil data dari PHP
         var labels = <?php echo json_encode($labels); ?>;
         var data = <?php echo json_encode($data); ?>;

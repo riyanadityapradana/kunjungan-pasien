@@ -1,212 +1,245 @@
 <?php
-	require_once("../../../configuration/koneksi.php");
-	session_start();
-    $tahun = date('Y');
-	$query = mysqli_query($mysqli,"SELECT * FROM poliklinik ORDER BY nm_poli")or die(mysqli_error($mysqli));
+require_once("../../../configuration/koneksi.php");
+session_start();
 
-    $query2 = "SELECT * FROM reg_periksa LEFT JOIN dokter ON reg_periksa.kd_dokter=dokter.kd_dokter";
-    $admin = mysqli_fetch_array(mysqli_query($mysqli,$query2));
-    $nm_dokter = $admin['nm_dokter'];
+// 🔹 Set zona waktu PHP ke WITA
+date_default_timezone_set('Asia/Makassar');
+
+// 🔹 Pastikan MySQL menggunakan zona waktu WITA
+// $mysqli->query("SET time_zone = 'Asia/Makassar'");
+
+$action = $_GET['action'] ?? ''; // Pastikan action tidak undefined
+
+if ($action === 'tanggal') {
+    $tanggal1 = $_POST['tanggalawal'] ?? '';
+    $tanggal2 = $_POST['tanggalakhir'] ?? '';
+
+    if (!empty($tanggal1) && !empty($tanggal2)) {
+        $tanggal2 .= " 23:59:59";
+        
+        // 🔹 Tambahkan proteksi SQL Injection dengan prepared statement
+        $sql = "SELECT p.nm_poli AS poli,
+                    MONTH(r.tgl_registrasi) AS bulan,
+                    COUNT(r.no_reg) AS jumlah
+                FROM reg_periksa r 
+                JOIN poliklinik p 
+                ON r.kd_poli = p.kd_poli
+                WHERE r.tgl_registrasi BETWEEN ? AND ?  
+                AND r.status_lanjut = 'Ralan' 
+                AND CAST(r.umurdaftar AS UNSIGNED) > 0 
+                AND CAST(r.umurdaftar AS UNSIGNED) < 12
+                GROUP BY p.nm_poli, bulan
+                ORDER BY p.nm_poli, bulan";
+
+        $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("ss", $tanggal1, $tanggal2);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    } else {
+        die("Tanggal tidak boleh kosong!");
+    }
+} else {
+    die("Aksi tidak valid!");
+}
+
+// Inisialisasi array
+$tableData = [];
+$totalPerBulan = array_fill(1, 12, 0);
+
+// Proses hasil query
+while ($row = $result->fetch_assoc()) {
+    $poli = $row['poli'];
+    $bulan = (int)$row['bulan'];
+    $jumlah = (int)$row['jumlah'];
+
+    // Inisialisasi array untuk poli jika belum ada
+    if (!isset($tableData[$poli])) {
+        $tableData[$poli] = array_fill(1, 12, 0);
+    }
+
+    // Simpan data kunjungan per bulan
+    $tableData[$poli][$bulan] = $jumlah;
+    $totalPerBulan[$bulan] += $jumlah;
+}
+
+// Konversi data untuk Chart.js
+$datasets = [];
+foreach ($tableData as $poli => $bulanData) {
+    $datasets[] = [
+        "label" => $poli,
+        "data" => array_values($bulanData),
+        "backgroundColor" => sprintf('rgba(%d, %d, %d, 0.6)', rand(50, 200), rand(50, 200), rand(50, 200))
+    ];
+}
+
+// Encode data ke JSON untuk JavaScript
+$jsonLabels = json_encode(range(1, 12));
+$jsonDatasets = json_encode($datasets);
+$jsonTotalPerBulan = json_encode(array_values($totalPerBulan));
 ?>
+
 <html>
 
 <head>
-	<title>Laporan</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-	<style>
-		table{margin:0 auto;border-collapse:collapse;background:#ffffff;}
-		caption h3{}
-		th{padding:7px 4px;background: #ffffff;}
-		td{padding:4px 15px;}
-	</style>
+    <title>Laporan</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>RSPI-LTE 3 | Dashboard 2</title>
+    <link rel="icon" href="../../../assets/img/icon.png">
+    <style>
+        table{margin:0 auto;border-collapse:collapse;background:#ffffff;}
+        caption h3{}
+        th{padding:7px 4px;background: #ffffff;}
+        td{padding:4px 15px;}
+        .inner-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+        }
+        .inner-table th, .inner-table td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+        /* Tombol Cetak */
+        #printButton {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        #printButton:hover {
+            background-color: #0056b3;
+        }
+        /* Sembunyikan tombol saat mencetak */
+        @media print {
+            #printButton {
+                display: none;
+            }
+        }
+    </style>
+
+    <!-- Bagian modal -->
+    
 </head>
 
 <body>
-	<div>
-		<table border='0'>
-			<tr>
-				<td align="center"><img src="../../../assets/img/logo.JPG" alt="..." width="150" height="150"></td>
-				<td align="center" width="90%">
-					<h2>RUMAH SAKIT PELITA INSANI</h2>
-						Alamat : Jalan Sekumpul No. 66, Martapura, Kalimantan Selatan 70614 Telp. (0511) 4722210
-				</td>
-			</tr>
-		</table>
-		
-		<hr>
-		<h4 align="center">LAPORAN KUNJUNGAN PASIEN SEMUA POLIKLINIK <p>BERDASARKAN KATEGORI LANJUT ANAK</h4>
-    </div>
-	
-    <table border ="1" width="95%">
-    <thead style="background:rgb(49, 88, 230)">
-        <tr>
-            <th rowspan = "2" style="text-align: center;">No</th>
-            <th rowspan = "2"style="text-align: center;">Nama Poli</th>
-            <th colspan = "12"style="text-align: center;">Jumlah Pasien Per Bulan</th>
-            <th rowspan = "2"style="text-align: center;">Total Pasien</th>
-        </tr>
-        <tr>
-            <th style="text-align: center;">01</th>
-            <th style="text-align: center;">02</th>
-            <th style="text-align: center;">03</th>
-            <th style="text-align: center;">04</th>
-            <th style="text-align: center;">05</th>
-            <th style="text-align: center;">06</th>
-            <th style="text-align: center;">07</th>
-            <th style="text-align: center;">08</th>
-            <th style="text-align: center;">09</th>
-            <th style="text-align: center;">10</th>
-            <th style="text-align: center;">11</th>
-            <th style="text-align: center;">12</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php
-        $n=1;
-        //$tahun = 2024;
-        $tahun = date('Y');
-        while ($a=mysqli_fetch_array($query)) {
-            // Perhitungan Stok
-        $idpoli = $a['kd_poli'];
-        $nn=$n++;
-    ?>
-        <tr class="gradeU">
-            <td align="center"><?php echo $nn ?></td>
-            <td align="center"><?php echo $a['nm_poli'] ?></td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_01 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '01' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml01  = mysqli_fetch_assoc($hitung_01);
-                    $jml_01 = $jml01['jumlahbulan'];
-                    echo $jml_01;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_02 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '02' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml02  = mysqli_fetch_assoc($hitung_02);
-                    $jml_02 = $jml02['jumlahbulan'];
-                    echo $jml_02;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_03 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '03' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml03  = mysqli_fetch_assoc($hitung_03);
-                    $jml_03 = $jml03['jumlahbulan'];
-                    echo $jml_03;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_04 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '04' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml04  = mysqli_fetch_assoc($hitung_04);
-                    $jml_04 = $jml04['jumlahbulan'];
-                    echo $jml_04;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_05 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '05' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml05  = mysqli_fetch_assoc($hitung_05);
-                    $jml_05 = $jml05['jumlahbulan'];
-                    echo $jml_05;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_06 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '06' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml06  = mysqli_fetch_assoc($hitung_06);
-                    $jml_06 = $jml06['jumlahbulan'];
-                    echo $jml_06;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_07 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '07' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml07  = mysqli_fetch_assoc($hitung_07);
-                    $jml_07 = $jml07['jumlahbulan'];
-                    echo $jml_07;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_08 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '08' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml08  = mysqli_fetch_assoc($hitung_08);
-                    $jml_08 = $jml08['jumlahbulan'];
-                    echo $jml_08;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_09 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '09' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml09  = mysqli_fetch_assoc($hitung_09);
-                    $jml_09 = $jml09['jumlahbulan'];
-                    echo $jml_09;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_10 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '10' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml10  = mysqli_fetch_assoc($hitung_10);
-                    $jml_10 = $jml10['jumlahbulan'];
-                    echo $jml_10;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_11 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '11' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml11  = mysqli_fetch_assoc($hitung_11);
-                    $jml_11 = $jml11['jumlahbulan'];
-                    echo $jml_11;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_12 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE MONTH(reg_periksa.tgl_registrasi) = '12' AND YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml12  = mysqli_fetch_assoc($hitung_12);
-                    $jml_12 = $jml12['jumlahbulan'];
-                    echo $jml_12;
-                ?>
-            </td>
-            <td align="center" style="color: black;">
-                <?php
-                    $hitung_13 = mysqli_query($mysqli, "SELECT count(no_reg) AS jumlahbulan from reg_periksa WHERE YEAR(reg_periksa.tgl_registrasi)='$tahun' AND reg_periksa.status_lanjut = 'Ralan' AND CAST(reg_periksa.umurdaftar AS UNSIGNED) > 0 AND CAST(reg_periksa.umurdaftar AS UNSIGNED) < 12");
-                    $jml13  = mysqli_fetch_assoc($hitung_13);
-                    $jml_13 = $jml13['jumlahbulan'];
-                    echo $jml_13;
-                ?>
-            </td>
-        </tr>
-    <?php }//end while?>
-    </tbody>
-    </table>
-	<br/><br/>
-	<div style="text-align: right; margin-top: 20px;" width="100%">
-        <table border="0" style="display: inline-block; text-align: center;">
+    <button id="printButton" onclick="printPage()">Cetak Halaman</button>
+    <div>
+        <table border='0'>
             <tr>
-                <td style="color: #000000; padding-bottom: 5px;">
-                    Banjarbaru, <?php echo date('d/m/Y'); ?>
-                </td>
-            </tr>
-            <tr>
-                <td style="color: #000000;">
-                    Kepala Seksi Produksi dan Distribusi
-                </td>
-            </tr>
-            <tr>
-                <td style="height: 80px;"></td>
-            </tr>
-            <tr>
-                <td style="color: #000000;">
-                    <strong>Wuri Handayani, S.Pt, M.P</strong><br>
-                    NIP 19730113 19903 2 004
+                <td align="center"><img src="../../../assets/img/logo.JPG" alt="..." width="150" height="150"></td>
+                <td align="center" width="90%">
+                    <h1>RUMAH SAKIT PELITA INSANI</h1>
+                        <h3>Alamat : Jalan Sekumpul No. 66, Martapura, Kalimantan Selatan 70614 Telp. (0511) 4722210</h3>
                 </td>
             </tr>
         </table>
+        
+        <hr>
+        <h4 align="center">LAPORAN BULANAN KUNJUNGAN PASIEN <p>BERDASARKAN KATEGORI ANAK</h4>
     </div>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+              <div class="card-tools">
+                  <a href="" data-toggle='modal' data-target='#proses' class="btn btn-tool btn-sm">
+                    <i class="fas fa-print"></i>
+                  </a>
+                  <a href="#" class="btn btn-tool btn-sm" data-card-widget="collapse" style="background:rgba(69, 77, 85, 1)">
+                        <i class="fas fa-bars"></i>
+                  </a>
+              </div>
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+                <table class="inner-table">
+                  <thead>
+                    <tr>
+                        <th rowspan="2" style="text-align: center; color: black; vertical-align: middle;">Nama Poli</th>
+                        <th colspan="12" style="text-align: center; color: black;">Jumlah Pasien Per Bulan</th>
+                        <th rowspan="2" style="text-align: center; color: black; vertical-align: middle;">Total</th>
+                    </tr>
+                    <tr>
+                        <?php for ($i = 1; $i <= 12; $i++) { ?>
+                            <th style="text-align: center; color: black;"><?php echo str_pad($i, 2, "0", STR_PAD_LEFT); ?></th>
+                        <?php } ?>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach ($tableData as $poli => $bulanData) { ?>
+                    <tr>
+                        <td align="left" style="color: black;"><?php echo $poli; ?></td>
+                        <?php 
+                        $total = 0;
+                        foreach ($bulanData as $jumlah) { 
+                            $total += $jumlah;
+                        ?>
+                            <td align="center" style="color: black;"><?php echo $jumlah; ?></td>
+                        <?php } ?>
+                        <td align="center" style="color: black; font-weight:bold;"><?php echo $total; ?></td>
+                    </tr>
+                    <?php } ?>
+                  </tbody>
+                </table>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Grafik Kunjungan</h3>
+          </div>
+          <div class="card-body">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br/><br/>
+    <script src="../../../assets/dist/css/chart4.js"></script>
+    <!-- Chart.js Library -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script>
+    function printPage() {
+        window.print(); // Menjalankan perintah cetak
+        }
+      var ctx = document.getElementById("barChart").getContext("2d");
+      var labels = <?php echo $jsonLabels; ?>;
+      var datasets = <?php echo $jsonDatasets; ?>;
+      var totalPerBulan = <?php echo $jsonTotalPerBulan; ?>;
+
+      datasets.push({
+        label: "Total Pasien",
+        type: "line",
+        data: totalPerBulan,
+        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderWidth: 2,
+        fill: false
+      });
+
+      new Chart(ctx, {
+        type: "bar",
+        data: { labels: labels, datasets: datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: "top" } },
+          scales: {
+            x: { title: { display: true, text: "Bulan" } },
+            y: { title: { display: true, text: "Jumlah Pasien" } }
+          }
+        }
+      });
+    </script>
   </body>
-  <script>
-		window.print();
-	</script>
   </html>

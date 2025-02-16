@@ -11,7 +11,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RSPI-LTE 3 | Dashboard 2</title>
-  <link rel="icon" href="../../assets/img/mLITE.png">
+  <link rel="icon" href="../../assets/img/icon.png">
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -29,7 +29,6 @@
   <link rel="stylesheet" href="../../assets/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-  ff
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -146,40 +145,70 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="main_admin_app.php?unit=grafik_poli&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-chart-pie"></i>
-                  <p>Chart</p>
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-hospital-user"></i>
+                  <p style="font-size: 15px;">
+                    segmen populasi pasien
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=lansia" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p> Berdasarkan Lansia</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=dewasa" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p> Berdasarkan Dewasa</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=remaja" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p> Berdasarkan Remaja</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=anak" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p> Berdasarkan Anak</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
+            </ul>
+            <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="main_admin_app.php?unit=lansia&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Lansia</p>
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-money-bill"></i>
+                  <p style="font-size: 13px;">
+                    Segmen pembiayaan pasien
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=dewasa&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Dewasa</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=remaja&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Remaja</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="main_admin_app.php?unit=anak&action=datagrid" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Kategori Anak</p>
-                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="pages/examples/login.html" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p> Berdasarkan Umum</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="pages/examples/login.html" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p> Berdasarkan BPJS</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-envelope"></i>
+              <i class="nav-icon fab fa-whatsapp"></i>
               <p>
                 Pi-Care
                 <i class="fas fa-angle-left right"></i>
@@ -188,13 +217,13 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                   <a href="main_admin_app.php?unit=daftar&action=datagrid" class="nav-link">
-                    <i class="nav-icon fas fa-envelope-open"></i>
+                    <i class="nav-icon fas fa-caret-right"></i>
                     <p>PENDAFTARAN</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="main_admin_app.php?unit=batal&action=datagrid" class="nav-link">
-                    <i class="nav-icon fas fa-envelope-open"></i>
+                    <i class="nav-icon fas fa-caret-right"></i>
                     <p>PEMBATALAN</p>
                   </a>
                 </li>
@@ -436,6 +465,9 @@
         "lengthChange": true,
         //"pageLength": 5, // Menampilkan 5 data per halaman
         "paging":true,
+        "scrollX": true,  // Aktifkan scroll horizontal
+        "autoWidth": false, // Cegah DataTables mengubah lebar tabel
+        "responsive": true // Pastikan tabel tetap responsif
         "pagingType":"numbers",
         "scrollCollapse": true,
         "ordering":true,
@@ -451,7 +483,7 @@
           "sInfoFiltered": "(disaring dari _MAX_ entri keseluruhan)",
           "sInfoPostFix":  "",
           "sSearch":       "",
-          "searchPlaceholder": "Cari Sekolah..",
+          "searchPlaceholder": "Cari Data..",
           "sUrl":          "",
           "oPaginate": {
             "sFirst":    "Pertama",
