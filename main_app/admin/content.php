@@ -33,8 +33,11 @@ else if ($_GET['unit'] == "lap_anak"){
   require_once("laporan/lap_poli_anak.php");
 }
 //Master segmen pembiyaan pasien (Beradasarkan Usia Pasien)
-else if ($_GET['unit'] == "pembiayaan_pasien"){
-  require_once("unit/kunjungan_pasien/segmen_pembiayaan_pasien/pembiayaan_pasien.php");
+else if ($_GET['unit'] == "bayar_ralan"){
+  require_once("unit/kunjungan_pasien/segmen_pembiayaan_pasien/pembiayaan_pasien_ralan.php");
+}
+else if ($_GET['unit'] == "bayar_ranap"){
+  require_once("unit/kunjungan_pasien/segmen_pembiayaan_pasien/pembiayaan_pasien_ranap.php");
 }
 //Pi-Care
 else if ($_GET['unit'] == "daftar"){

@@ -150,7 +150,7 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-hospital-user"></i>
-                  <p style="font-size: 15px;">
+                  <p style="font-size: 13px;">
                     segmen populasi pasien
                     <i class="fas fa-angle-left right"></i>
                   </p>
@@ -185,10 +185,27 @@
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="main_admin_app.php?unit=pembiayaan_pasien&action=datagrid" class="nav-link">
-                <i class="nav-icon fas fa-money-bill"></i>
-                  <p style="font-size: 13px;">Segmen pembiayaan pasien</p>
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-money-bill"></i>
+                  <p style="font-size: 13px;">
+                    Segmen Pembayaran pasien
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=bayar_ralan&action=datagrid" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p style="font-size: 13px;"> Metode Pembayaran Pasien Ralan</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=bayar_ranap&action=datagrid" class="nav-link">
+                      <i class="fas fa-caret-right"></i>
+                      <p style="font-size: 13px;"> Metode Pembayaran Pasien Ranap</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>
@@ -258,8 +275,6 @@
 <!-- jQuery -->
 <script src="../../assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap -->
-<script src="../../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Bootstrap 4 -->
 <script src="../../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Select2 -->
 <script src="../../assets/plugins/select2/js/select2.full.min.js"></script>
