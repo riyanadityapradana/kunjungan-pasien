@@ -32,8 +32,10 @@ else if ($_GET['unit'] == "lap_remaja"){
 else if ($_GET['unit'] == "lap_anak"){
   require_once("laporan/lap_poli_anak.php");
 }
-
-
+//Master segmen pembiyaan pasien (Beradasarkan Usia Pasien)
+else if ($_GET['unit'] == "pembiayaan_pasien"){
+  require_once("unit/kunjungan_pasien/segmen_pembiayaan_pasien/pembiayaan_pasien.php");
+}
 //Pi-Care
 else if ($_GET['unit'] == "daftar"){
   require_once("unit/pi-care/pi-care_daftar.php");
