@@ -78,7 +78,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
+        <div class="card card-primary">
         <div class="card-header">
               <div class="card-tools" style="float: left; text-align: left;">
                <select class="form-control select2" style="min-width: 250px;" onChange="document.location.href=this.options[this.selectedIndex].value;" id="jenis" name="jenis">
@@ -89,7 +89,7 @@
                </select>
               </div>
               <div class="card-tools" style="float: right; text-align: right;">
-                  <a href="" data-toggle='modal' data-target='#proses' class="btn btn-tool btn-sm">
+                  <a href="" data-toggle='modal' data-target='#proses' class="btn btn-tool btn-sm" style="background:rgba(69, 77, 85, 1)">
                     <i class="fas fa-print"></i>
                   </a>
                   <a href="#" class="btn btn-tool btn-sm" data-card-widget="collapse" style="background:rgba(69, 77, 85, 1)">
@@ -112,7 +112,7 @@
                         <?php } ?>
                     </tr>
                   </thead>
-                  <tbody style="background:rgb(214, 223, 227)">
+                  <tbody style="background:rgb(143, 143, 143)">
                     <?php foreach ($tableData as $poli => $bulanData) { ?>
                     <tr>
                         <td align="left" style="color: black;"><?php echo $poli; ?></td>
@@ -139,7 +139,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
+        <div class="card card-primary">
           <div class="card-header">
             <h3 class="card-title">Grafik Kunjungan</h3>
           </div>
@@ -161,7 +161,7 @@
                          <h3>PILIH TANGGAL KUNJUNGAN</h3>
                     </div>
                     <div class="modal-body" align = "left">
-                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_picaredaftar.php?action=tanggal" target="blank">
+                         <form role="form" enctype="multipart/form-data" method="post" action="laporan/lap_bayar_ralan.php?action=tanggal" target="blank">
                               <div class="row">
                                    <div class="form-group col-lg-6">
                                         <input type="date" name="tanggalawal" class="form-control" placeholder="<?=date('Y-m-d');?>">
