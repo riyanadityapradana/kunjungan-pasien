@@ -31,7 +31,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../assets/dist/css/adminlte.min.css">
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<body class="hold-transition white-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-dark">
+  <nav class="main-header navbar navbar-expand navbar-white">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -94,9 +94,9 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background:rgb(255, 255, 255)">
     <!-- Brand Logo -->
-    <a href="main_admin_app.php?unit=beranda" class="brand-link">
+    <a href="main_admin_app.php?unit=beranda" class="brand-link" style="background:rgb(0, 123, 255, 1)">
       <img src="../../assets/img/logo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">RSPI-LTE</span>
     </a>
@@ -109,14 +109,14 @@
           <img src="../../assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Admin IT</a>
+          <a href="#" class="d-block" style="color: black;">Admin IT</a>
         </div>
       </div>
 
       <!-- SidebarSearch Form -->
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" style="background:rgb(255, 255, 255)">
           <div class="input-group-append">
             <button class="btn btn-sidebar">
               <i class="fas fa-search fa-fw"></i>
@@ -131,105 +131,105 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
+            <a href="main_admin_app.php?unit=beranda" class="nav-link" style="background:rgb(231, 234, 232)">
+            <i class="nav-icon fas fa-tachometer-alt" style="color: black;"></i>
+              <p style="color: black;">
               Dashboard
               </p>
             </a>
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-ambulance"></i>
-              <p>
-                Kunjungan Pasien
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-hospital-user"></i>
-                  <p style="font-size: 13px;">
-                    segmen populasi pasien
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="main_admin_app.php?unit=lansia" class="nav-link">
-                      <i class="fas fa-caret-right"></i>
-                      <p> Berdasarkan Lansia</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="main_admin_app.php?unit=dewasa" class="nav-link">
-                      <i class="fas fa-caret-right"></i>
-                      <p> Berdasarkan Dewasa</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="main_admin_app.php?unit=remaja" class="nav-link">
-                      <i class="fas fa-caret-right"></i>
-                      <p> Berdasarkan Remaja</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="main_admin_app.php?unit=anak" class="nav-link">
-                      <i class="fas fa-caret-right"></i>
-                      <p> Berdasarkan Anak</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-money-bill"></i>
-                  <p style="font-size: 13px;">
-                    Segmen Pembayaran pasien
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="main_admin_app.php?unit=bayar_ralan&action=datagrid" class="nav-link">
-                      <i class="fas fa-caret-right"></i>
-                      <p style="font-size: 13px;"> Metode Pembayaran Pasien Ralan</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="main_admin_app.php?unit=bayar_ranap&action=datagrid" class="nav-link">
-                      <i class="fas fa-caret-right"></i>
-                      <p style="font-size: 13px;"> Metode Pembayaran Pasien Ranap</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fab fa-whatsapp"></i>
-              <p>
+              <i class="nav-icon fab fa-whatsapp" style="color: green;"></i>
+              <p style="color: black;">
                 Pi-Care
-                <i class="fas fa-angle-left right"></i>
+                <i class="fas fa-angle-left right" style="color: black;"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                   <a href="main_admin_app.php?unit=daftar&action=datagrid" class="nav-link">
-                    <i class="nav-icon fas fa-caret-right"></i>
-                    <p>PENDAFTARAN</p>
+                    <i class="nav-icon fas fa-caret-right" style="color: black;"></i>
+                    <p style="color: black;">PENDAFTARAN</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="main_admin_app.php?unit=batal&action=datagrid" class="nav-link">
-                    <i class="nav-icon fas fa-caret-right"></i>
-                    <p>PEMBATALAN</p>
+                    <i class="nav-icon fas fa-caret-right" style="color: black;"></i>
+                    <p style="color: black;">PEMBATALAN</p>
                   </a>
                 </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-ambulance" style="color: red;"></i>
+              <p style="color: black;">
+                Kunjungan Pasien
+                <i class="right fas fa-angle-left" style="color: black;"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-hospital-user" style="color: black;"></i>
+                  <p style="font-size: 13px; color: black;">
+                    segmen populasi pasien
+                    <i class="fas fa-angle-left right" style="color: black;"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=lansia" class="nav-link">
+                      <i class="fas fa-caret-right" style="color: black;"></i>
+                      <p style="color: black;"> Berdasarkan Lansia</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=dewasa" class="nav-link">
+                      <i class="fas fa-caret-right" style="color: black;"></i>
+                      <p style="color: black;"> Berdasarkan Dewasa</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=remaja" class="nav-link">
+                      <i class="fas fa-caret-right" style="color: black;"></i>
+                      <p style="color: black;"> Berdasarkan Remaja</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=anak" class="nav-link">
+                      <i class="fas fa-caret-right" style="color: black;"></i>
+                      <p style="color: black;"> Berdasarkan Anak</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-money-bill" style="color: green;"></i>
+                  <p style="font-size: 13px; color: black;">
+                    Segmen Pembayaran pasien
+                    <i class="fas fa-angle-left right" style="color: black;"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=bayar_ralan&action=datagrid" class="nav-link">
+                      <i class="fas fa-caret-right" style="color: black;"></i>
+                      <p style="font-size: 13px; color: black;"> Metode Pembayaran Pasien Ralan</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="main_admin_app.php?unit=bayar_ranap&action=datagrid" class="nav-link">
+                      <i class="fas fa-caret-right" style="color: black;"></i>
+                      <p style="font-size: 13px; color: black;"> Metode Pembayaran Pasien Ranap</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </li>
         </ul>

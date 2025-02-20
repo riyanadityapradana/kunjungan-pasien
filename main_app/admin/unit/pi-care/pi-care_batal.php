@@ -75,7 +75,7 @@ $mysqli2->close();
                <!-- Tabel Data -->
                <div class="col-md-6">
                     <div class="card">
-                    <div class="card-header" style="background:rgb(63, 103, 145, 1)">
+                    <div class="card-header" style="background:rgb(0, 123, 255, 1)">
                          <h3 class="card-title" style="color: white;">DATA PASIEN</h3>
                          <div class="card-tools">
                          <a href="" data-toggle='modal' data-target='#proses' class="btn btn-tool btn-sm"> 
@@ -86,9 +86,9 @@ $mysqli2->close();
                          </a>
                          </div>
                     </div>
-                    <div class="card-body" style="background:rgb(48, 49, 49)">
+                    <div class="card-body" style="background:rgb(250, 255, 255)">
                          <table id="example-picare" class="table table-bordered table-striped">
-                              <thead style="background:rgba(69, 77, 85, 1)">
+                              <thead style="background:rgb(0, 123, 255, 1)">
                                    <tr>
                                         <th style="text-align: center; color: white;">Tanggal Pelayanan</th>
                                         <th style="text-align: center; color: white;">Jumlah Pasien</th>

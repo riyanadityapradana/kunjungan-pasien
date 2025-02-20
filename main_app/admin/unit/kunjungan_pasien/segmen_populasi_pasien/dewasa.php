@@ -71,11 +71,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
+        <div class="card card-primary">
           <div class="card-header">
              <h3 class="card-title" style="text-align: center;">Kunjungan Pasien Kategori Dewasa</h3>
               <div class="card-tools">
-                  <a href="" data-toggle='modal' data-target='#proses' class="btn btn-tool btn-sm">
+                  <a href="" data-toggle='modal' data-target='#proses' class="btn btn-tool btn-sm" style="background:rgba(69, 77, 85, 1)">
                     <i class="fas fa-print"></i>
                   </a>
                   <a href="#" class="btn btn-tool btn-sm" data-card-widget="collapse" style="background:rgba(69, 77, 85, 1)">
@@ -125,7 +125,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
+        <div class="card card-primary">
           <div class="card-header">
             <h3 class="card-title">Grafik Kunjungan</h3>
           </div>
